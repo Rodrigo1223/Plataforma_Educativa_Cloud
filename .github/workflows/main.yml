@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest 
     steps:
 
-      # Paso 1: Checkout del repositorio
+      # Paso 1: Checkout del repositorio (Actualizado a v4)
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Paso 2: Autenticar en DockerHub
+      # Paso 2: Autenticar en DockerHub (Actualizado a la versión estable v3)
       - name: Log in to DockerHub
-        uses: docker/login-action@v2 
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -34,9 +34,9 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
           
-      # Paso 5: Configurar credenciales de AWS
+      # Paso 5: Configurar credenciales de AWS (Actualizado a v4)
       - name: Set up AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -57,7 +57,6 @@ jobs:
           DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
           HOST_IP: ${{ secrets.EC2_HOST }}
           SSH_USER: ${{ secrets.USER_SERVER }}
-          # Mapeo de llaves de AWS para pasarlas a través del túnel SSH
           AWS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
@@ -73,7 +72,7 @@ jobs:
             sudo docker stop my-app || true
             sudo docker rm my-app || true
             
-            # CORREGIDO: Iniciar el contenedor pasándole las variables de entorno para S3
+            # Iniciar el contenedor pasándole las variables de entorno para S3
             sudo docker run -d --name my-app \
               -p 8080:8080 \
               -e AWS_ACCESS_KEY_ID="$AWS_KEY" \
